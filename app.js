@@ -12,6 +12,8 @@ const helmet = require('helmet');
 const Joi = require('joi');
 const express = require('express');
 const app = express();
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database(':memory:');
 
 // middleware to process json in request pipeline
 app.use(express.json());
@@ -26,8 +28,3 @@ if (app.get('env') === 'development') {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
-
-// sqlite npm package 
-// docs at https://www.npmjs.com/package/sqlite
-
-var _ = require('sqlite');
