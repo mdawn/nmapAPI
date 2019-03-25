@@ -2,9 +2,9 @@ const Joi = require('joi');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
 
-// scan model schema or whatever here
+// scan schema or whatever here
 const Scan = sqlite.model('Scan', new sqlite.Schema({
-    
+
 }))
 
 // docs at https://www.npmjs.com/package/sqlite
