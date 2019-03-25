@@ -1,48 +1,33 @@
-const fs = require('fs');
+// const fs = require('fs');
 
 // asynchronous file reader which returns array of strings
 // TODO: read nmap instead of path
-fs.readdir('./', function(err, files) {
+/* fs.readdir('./', function(err, files) {
     if (err) console.log('Error', err);
     else console.log('Result', files);
-});
+});*/
+const nmaps = require('./routes/nmaps');
+const morgan = require('morgan');
+const helmet = require('helmet');
+const Joi = require('joi');
+const express = require('express');
+const app = express();
 
-// emitting events from logger 
-const EventEmitter = require('events');
+// middleware to process json in request pipeline
+app.use(express.json());
+app.use('/api/nmaps', nmaps);
+app.use(express.static('public'));
+app.use(helmet());
 
-const Logger = require('./logger');
-const logger = new Logger();
+if (app.get('env') === 'development') {
+    app.use(morgan('tiny'));
+    console.log('Morgan enabled')
+}
 
-logger.on('messageLogged', (arg) => {
-    console.log('Listener called', arg);
-});
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Listening on port ${port}...`));
 
-logger.log('message');
-
-// API the non-express way
-const http = require('http');
-
-const server = http.createServer((req, res) => {
-    // work with request or response object
-    if (req.url === '/') {
-        // define the response
-        res.write('Hello World');
-        res.end();
-    }
-    // endpoint that responds to http://localhost:3000/api/courses
-    if (req.url === '/api/courses') {
-        // return a json array of ints (could be db stuff, etc.) as a string
-        res.write(JSON.stringify([1, 2, 3]));
-        res.end();
-    }
-});
-server.listen(3000);
-
-console.log('Listening on port 3000...');
-
-// sqlite npm package - A wrapper library that adds ES6 promises and SQL-based migrations API to sqlite3 (docs).
+// sqlite npm package 
 // docs at https://www.npmjs.com/package/sqlite
 
 var _ = require('sqlite');
-
-
