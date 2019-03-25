@@ -1,4 +1,4 @@
-# Nmap Ingestor
+# Nmap Ingester
 
 A NodeJS [Nmap scan](https://nmap.org/) storage app using [SQLite](https://sqlite.org/index.html) with a UI allowing search by IP address.
 
