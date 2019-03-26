@@ -1,16 +1,29 @@
 const Joi = require('joi');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
+const fs = require('fs');
 
-// scan schema or whatever here
-const Scan = sqlite.model('Scan', new sqlite.Schema({
 
-}))
+// import db schema from sql file
+var exec = require('child_process').exec; 
+spawn = require("child_process").spawn
+child = spawn("sqlite3", ["mydb.db"])
+
+child = exec('cat ./models/schema.sql | sqlite3 mydb.db', (error) => {
+    console.log("mydb.db created")    
+    if (error !== null) {
+            console.log('something happened with db' + error);
+        }
+    }
+);
+
+fs.createReadStream("./models/schema.sql").pipe(child.stdin)
+
 
 // docs at https://www.npmjs.com/package/sqlite
-
+/* var check;
 db.serialize(function () {
-    db.run('CREATE TABLE lorem (info TEXT)')
+    db.run('CREATE TABLE if not exists lorem (info TEXT)')
     var stmt = db.prepare('INSERT INTO lorem VALUES (?)')
   
     for (var i = 0; i < 10; i++) {
@@ -24,4 +37,4 @@ db.serialize(function () {
     })
   })
   
-  db.close()
+  db.close() */
