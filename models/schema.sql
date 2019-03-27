@@ -1,18 +1,19 @@
 
 
-CREATE TABLE IF NOT EXISTS hosts (
-    ip          VARCHAR(16) PRIMARY KEY NOT NULL,
-    mac         VARCHAR(18),
-    hostname    VARCHAR(129),
-    protocol    VARCHAR(5) DEFAULT 'ipv4',
-    os_name     TEXT,
-    os_family   TEXT,
-    os_accuracy INTEGER,
-    os_gen      TEXT,
-    last_update TIMESTAMP,
-    state       VARCHAR(8) DEFAULT 'down',
-    mac_vendor  TEXT,
-    whois       TEXT
+CREATE TABLE IF NOT EXISTS scanData (
+    result_id       INTEGER NOT NULL,
+    ip              VARCHAR(16) PRIMARY KEY NOT NULL,
+    hostname        VARCHAR(129),
+    port_id         TEXT,
+    protocol        VARCHAR(5) DEFAULT 'ipv4',
+    state           VARCHAR(20) DEFAULT 'down',
+    reason          TEXT,
+    reason_ttl      TEXT,
+    service_name    TEXT,
+    service_method  TEXT,
+    service_conf    TEXT,
+    start_time      TIMESTAMP,
+    stop_time       TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS ports (
@@ -24,29 +25,29 @@ CREATE TABLE IF NOT EXISTS ports (
     service     TEXT,
     info        TEXT,
     PRIMARY KEY (ip, port, protocol),
-    CONSTRAINT fk_ports_hosts FOREIGN KEY (ip) REFERENCES hosts(ip) ON DELETE CASCADE
+    CONSTRAINT fk_ports_scanData FOREIGN KEY (ip) REFERENCES scanData(ip) ON DELETE CASCADE
 );
 
-CREATE TRIGGER IF NOT EXISTS fki_ports_hosts_ip
+CREATE TRIGGER IF NOT EXISTS fki_ports_scanData_ip
 BEFORE INSERT ON ports
 FOR EACH ROW BEGIN
     SELECT CASE
-        WHEN ((SELECT ip FROM hosts WHERE ip = NEW.ip) IS NULL)
+        WHEN ((SELECT ip FROM scanData WHERE ip = NEW.ip) IS NULL)
         THEN RAISE(ABORT, 'insert on table "ports" violates foreign key constraint "fk_ports_hosts"')
     END;
 END;
 
-CREATE TRIGGER IF NOT EXISTS fku_ports_hosts_ip
+CREATE TRIGGER IF NOT EXISTS fku_ports_scanData_ip
 BEFORE UPDATE ON ports
 FOR EACH ROW BEGIN
     SELECT CASE
-        WHEN ((SELECT ip FROM hosts WHERE ip = NEW.ip) IS NULL)
-        THEN RAISE(ABORT, 'update on table "ports" violates foreign key constraint "fk_ports_hosts"')
+        WHEN ((SELECT ip FROM scanData WHERE ip = NEW.ip) IS NULL)
+        THEN RAISE(ABORT, 'update on table "scanData" violates foreign key constraint "fk_ports_hosts"')
     END;
 END;
 
-CREATE TRIGGER IF NOT EXISTS fkd_ports_hosts_ip
-BEFORE DELETE ON hosts
+CREATE TRIGGER IF NOT EXISTS fkd_ports_scanData_ip
+BEFORE DELETE ON scanData
 FOR EACH ROW BEGIN
     DELETE from ports WHERE ip = OLD.ip;
 END;

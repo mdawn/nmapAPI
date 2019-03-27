@@ -6,10 +6,27 @@
     <link rel="stylesheet" href="/main.css">
   </head>
   <body>
-    <h1>Upload Nmap xml</h1>
-    <form name="nmapForm" action="/scan" method="post">
-      <input type="test" name="scan" size="40" placeholder="Add a scan">
-      <button type="submit">Submit</button>
+    <h1>Nmap Ingester</h1>
+    <form action="/submit_file" method="POST" enctype="multipart/form-data">
+      <div class="container-fluid">
+          <fieldset>
+              <legend>Upload Nmap XML File</legend>
+              <input type="file" class="form-control-file" name="extract_file">
+              <br>
+              <button type="submit" class="btn btn-primary">Submit</button>
+          </fieldset> 
+      </div>
+    </br>
+    <div class="container-fluid">
+      <fieldset>
+          <legend>View Scan Results by IP address</legend>
+      <form action="/show" method="POST">
+        <input type="text" placeholder="IP Address">
+        <p> </p>
+        <button type="button" id="scanned-ip-button">Submit</button>
+      </fieldset> 
+    </div>
+    
     </form>
 
     <ul></ul>
