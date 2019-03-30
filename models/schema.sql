@@ -1,17 +1,13 @@
 
-
 CREATE TABLE IF NOT EXISTS scanData (
     result_id       INTEGER NOT NULL,
     ip              VARCHAR(16) PRIMARY KEY NOT NULL,
     hostname        VARCHAR(129),
     port_id         TEXT,
     protocol        VARCHAR(5) DEFAULT 'ipv4',
-    state           VARCHAR(20) DEFAULT 'down',
-    reason          TEXT,
-    reason_ttl      TEXT,
-    service_name    TEXT,
-    service_method  TEXT,
-    service_conf    TEXT,
+    status_state    VARCHAR(20) DEFAULT 'down',
+    port_reason     TEXT,
+    port_reason_ttl TEXT,
     start_time      TIMESTAMP,
     stop_time       TIMESTAMP
 );
@@ -21,7 +17,7 @@ CREATE TABLE IF NOT EXISTS ports (
     port        INTEGER NOT NULL,
     protocol    VARCHAR(4) NOT NULL,
     name        VARCHAR(33),
-    state       VARCHAR(33) DEFAULT 'closed',
+    port_state  VARCHAR(33) DEFAULT 'closed',
     service     TEXT,
     info        TEXT,
     PRIMARY KEY (ip, port, protocol),

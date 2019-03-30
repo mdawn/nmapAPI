@@ -5,8 +5,9 @@ A NodeJS [Nmap scan](https://nmap.org/) storage app using [SQLite](https://sqlit
 ## Description
 
 This API answers these questions:
-1. 
-2.
+1. What scans are present in a given xml file of scans?
+and
+2. Given an IP address, what other pertinent info is there in a scan?
 
 
 This can be useful if we want to ... Practical applications include ...

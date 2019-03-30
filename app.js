@@ -1,4 +1,5 @@
 const nmaps = require('./routes/nmaps');
+const writeScanToDB = require('./models/scans').writeScanToDB;
 const morgan = require('morgan');
 const helmet = require('helmet');
 const Joi = require('joi');
@@ -6,12 +7,10 @@ const express = require('express');
 const app = express();
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
+const fs = require('fs')
+const xml2js = require('xml2js');
+const util = require('util');
 
-var fs = require('fs'),
-    xml2js = require('xml2js');
-    var util = require('util');
-
-var parser = new xml2js.Parser();
 
 // middleware to process json in request pipeline
 app.use(express.json());
@@ -24,15 +23,75 @@ if (app.get('env') === 'development') {
     console.log('Morgan enabled')
 }
 
+// parse xml to js object
+var parser = new xml2js.Parser();
+
+fs.readFile(__dirname + '/samples/nmap.results.xml', function(err, data) {
+  parser.parseString(data, function (err, result) {
+    let scans = result.nmaprun.host;
+    // loop thru arrays and recast into digestable bits
+    scans.forEach(parseAndWriteToDB);
+
+    function parseAndWriteToDB (scan) {
+      console.log('\n\n');
+
+      console.log('scan:')
+      // make easy to view
+      console.log(JSON.stringify(scan));
+      const myIP = scan.address[0]['$'].addr;
+      // if hostname has "$" and "name" look past name to get value
+      let hostname;
+      if (scan.hostnames[0].hostname && scan.hostnames[0].hostname[0]['$'].name) {
+        hostname = scan.hostnames[0].hostname[0]['$'].name;
+        // otherwise take "\n" as value
+      } else {
+        hostname = scan.hostnames[0];
+      }
+      const portID = scan.ports[0].port[0]['$'].portid;
+      const protocol = scan.ports[0].port[0]['$'].protocol;
+      const statusState = scan.status[0]['$'].state;
+      const portState = scan.ports[0].port[0].state[0]['$'].state;
+      const statusStateReason = scan.status[0]['$'].reason;
+      const portStateReason = scan.ports[0].port[0].state[0]['$'].reason;
+      const statusStateReasonTTL = scan.status[0]['$'].reason_ttl;
+      const portStateReasonTTL = scan.ports[0].port[0].state[0]['$'].reason_ttl;
+      const startTime = scan.$.starttime;
+      const stopTime = scan.$.endtime;
+
+
+      console.log(`host stop time is ${stopTime}`);
+      console.log(`host start time is ${startTime}`);
+      console.log(`port state reason_ttl is ${portStateReasonTTL}`);
+      console.log(`status state reason_ttl is ${statusStateReasonTTL}`);
+      console.log(`port state reason is ${portStateReason}`);
+      console.log(`status state reason is ${statusStateReason}`);
+      console.log(`port state is ${portState}`);
+      console.log(`status state is ${statusState}`);
+      console.log(`protocol is ${protocol}`);
+      console.log(`port_id is ${portID}`);
+      console.log(`ip is ${myIP}`);
+      console.log(`hostname is ${JSON.stringify(hostname)}`);
+      writeScanToDB({
+        'ip': myIP,
+        'hostname': hostname,
+        'port_id': portID,
+        'protocol': protocol,
+        'status state': statusState,
+        'port state': portState,
+        'status state reason': statusStateReason,
+        'port state reason': portStateReason,
+        'status state reason_ttl': statusStateReasonTTL,
+        'port state reason_ttl': portStateReasonTTL,
+        'host start time': startTime,
+        'host stop time': stopTime
+      });
+    }
+    
+      
+
+      console.log('Done');
+  });
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
-
-
-// parse xml to JSON
-fs.readFile(__dirname + '/samples/nmap.results.xml', function(err, data) {
-    parser.parseString(data, function (err, result) {
-        console.log(util.inspect(JSON.stringify(result), false, null));
-        console.log('Done');
-    });
-});
