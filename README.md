@@ -7,25 +7,19 @@ A NodeJS [Nmap scan](https://nmap.org/) storage app using [SQLite](https://sqlit
 This API answers these questions:
 1. What scans are present in a given xml file of scans?
 and
-2. Given an IP address, what other pertinent info is there in a scan?
+2. Given an IP address, what pertinent info is there in a scan?
 
-
-This can be useful if we want to ... Practical applications include ...
 
 ## What it Does
 
-At http://localhost:3000, this API will:
 
-1. 
-2. 
-and
-3.  
 
 ## Example Scenario
 
-We want to ... 
+We want to upload an xml file of Nmap scans and view a scan inside that file
 
-**STEP 1**: ...
+**STEP 1**: 
+Clone this repo
 
 **STEP 2**: ... 
 

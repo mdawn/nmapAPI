@@ -13,7 +13,7 @@ router.post('/', (req,res) => {
     // const getFile = req.params.;
     console.log("lookupIP: " + lookupIP)
     db.run(
-        'INSERT INTO scanData VALUES ($ip, $hostname, $host_status, $port_id1, $port_id2, $port_id3, $protocol1, $protocol2, $protocol3, $port_state1, $port_state2, $port_state3, $service_name1, $service_name2, $service_name3, $start_time, $stop_time)',
+        'INSERT INTO scanData VALUES ($ip, $hostname, $host_status, $port_id1, $port_id2, $port_id3, port_id4, $protocol1, $protocol2, $protocol3, $protocol4, $port_state1, $port_state2, $port_state3, $port_state4, $service_name1, $service_name2, $service_name3, $service_name4, $start_time, $stop_time)',
         {
             $ip: req.body.ip,
             $hostname: req.body.hostname,
@@ -21,15 +21,19 @@ router.post('/', (req,res) => {
             $port_id1: req.body.port_id,
             $port_id2: req.body.port_id,
             $port_id3: req.body.port_id,
+            $port_id4: req.body.port_id,
             $protocol1: req.body.protocol,
             $protocol2: req.body.protocol,
             $protocol3: req.body.protocol,
+            $protocol4: req.body.protocol,
             $port_state1: req.body.state,
             $port_state2: req.body.state,
             $port_state3: req.body.state,
+            $port_state4: req.body.state,
             $service_name1: req.body.name,
             $service_name2: req.body.name,
-            $service_name3: req.body.name,     
+            $service_name3: req.body.name,
+            $service_name4: req.body.name,     
             $start_time: req.body.start_time,
             $stop_time: req.body.stop_time
         },
@@ -85,19 +89,3 @@ router.get('/:ip', (req, res) => {
 });
 
 module.exports = router;
-
-/* db.serialize(function (newScan) { 
-    db.run('CREATE TABLE if not exists hosts (result_id INTEGER, ip VARCHAR(16) PRIMARY KEY, hostname VARCHAR(129), port_id TEXT, protocol VARCHAR(5) DEFAULT `ipv4`, state VARCHAR(20) DEFAULT `down`, port_reason TEXT, port_reason_ttl TEXT, start_time TIMESTAMP, stop_time TIMESTAMP)')
-    var stmt = db.prepare('INSERT INTO hosts VALUES (?,?,?,?,?,?,?,?,?,?)')
-  
-    for (var i = 0; i < 10; i++) {
-      stmt.run('Ipsum ' + i)
-    }
-  
-    stmt.finalize()
-  
-    db.each('SELECT rowid AS id, ip FROM scanData', function (err, row) {
-      console.log(row.id + ': ' + row.result_id, row.ip, row.hostname, row.port_id, row.protocol, row.state, row.reason, row.reason_ttl, row.service_name, row.service_method, row.service_conf, row.start_time, row.stop_time)
-    })
-  }) 
-  db.close()  */
