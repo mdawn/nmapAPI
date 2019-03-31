@@ -19,7 +19,7 @@ child = exec('cat ./models/schema.sql | sqlite3 mydb.db', (error) => {
 fs.createReadStream("./models/schema.sql").pipe(child.stdin)
 
 function writeScanToDB (scanData) {
-    // TODO: 
+    // TODO
     console.log(`writing ${JSON.stringify(scanData)}`);
 }
 

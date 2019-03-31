@@ -13,15 +13,23 @@ router.post('/', (req,res) => {
     // const getFile = req.params.;
     console.log("lookupIP: " + lookupIP)
     db.run(
-        'INSERT INTO scanData VALUES ($ip, $hostname, $port_id, $protocol, $state, $port_reason, $port_reason_ttl, $start_time, $stop_time)',
+        'INSERT INTO scanData VALUES ($ip, $hostname, $host_status, $port_id1, $port_id2, $port_id3, $protocol1, $protocol2, $protocol3, $port_state1, $port_state2, $port_state3, $service_name1, $service_name2, $service_name3, $start_time, $stop_time)',
         {
             $ip: req.body.ip,
             $hostname: req.body.hostname,
-            $port_id: req.body.port_id,
-            $protocol: req.body.protocol,
-            $state: req.body.state,
-            $port_reason: req.body.state,
-            $port_reason_ttl: req.body.reason_ttl,     
+            $host_status: req.body.state,
+            $port_id1: req.body.port_id,
+            $port_id2: req.body.port_id,
+            $port_id3: req.body.port_id,
+            $protocol1: req.body.protocol,
+            $protocol2: req.body.protocol,
+            $protocol3: req.body.protocol,
+            $port_state1: req.body.state,
+            $port_state2: req.body.state,
+            $port_state3: req.body.state,
+            $service_name1: req.body.name,
+            $service_name2: req.body.name,
+            $service_name3: req.body.name,     
             $start_time: req.body.start_time,
             $stop_time: req.body.stop_time
         },

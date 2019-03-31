@@ -47,31 +47,46 @@ fs.readFile(__dirname + '/samples/nmap.results.xml', function(err, data) {
       } else {
         hostname = scan.hostnames[0];
       }
-      const portID = scan.ports[0].port[0]['$'].portid;
-      const protocol = scan.ports[0].port[0]['$'].protocol;
-      const statusState = scan.status[0]['$'].state;
-      const portState = scan.ports[0].port[0].state[0]['$'].state;
-      const statusStateReason = scan.status[0]['$'].reason;
-      const portStateReason = scan.ports[0].port[0].state[0]['$'].reason;
-      const statusStateReasonTTL = scan.status[0]['$'].reason_ttl;
-      const portStateReasonTTL = scan.ports[0].port[0].state[0]['$'].reason_ttl;
+      const portID1 = scan.ports[0].port[0]['$'].portid;
+      const protocol1 = scan.ports[0].port[0]['$'].protocol;
+      const hostStatus = scan.status[0]['$'].state;
+      const portState1 = scan.ports[0].port[0].state[0]['$'].state;
+      // const statusStateReason = scan.status[0]['$'].reason;
+      // const portStateReason = scan.ports[0].port[0].state[0]['$'].reason;
+      // const statusStateReasonTTL = scan.status[0]['$'].reason_ttl;
+      // const portStateReasonTTL = scan.ports[0].port[0].state[0]['$'].reason_ttl;
       const startTime = scan.$.starttime;
       const stopTime = scan.$.endtime;
 
 
-      console.log(`host stop time is ${stopTime}`);
-      console.log(`host start time is ${startTime}`);
-      console.log(`port state reason_ttl is ${portStateReasonTTL}`);
-      console.log(`status state reason_ttl is ${statusStateReasonTTL}`);
-      console.log(`port state reason is ${portStateReason}`);
-      console.log(`status state reason is ${statusStateReason}`);
-      console.log(`port state is ${portState}`);
-      console.log(`status state is ${statusState}`);
-      console.log(`protocol is ${protocol}`);
-      console.log(`port_id is ${portID}`);
       console.log(`ip is ${myIP}`);
       console.log(`hostname is ${JSON.stringify(hostname)}`);
-      writeScanToDB({
+      console.log(`host status is ${hostStatus}`);
+      console.log(`port_id 1 is ${portID1}`);
+      //
+      //
+      console.log(`protocol 1 is ${protocol1}`);
+      // 
+      //
+      //
+      console.log(`port state 1 is ${portState1}`);
+      //
+      //
+      // service 1
+      //
+      //
+      console.log(`host start time is ${startTime}`);
+      console.log(`host stop time is ${stopTime}`);
+
+
+      // X console.log(`port state reason_ttl is ${portStateReasonTTL}`);
+      // X console.log(`status state reason_ttl is ${statusStateReasonTTL}`);
+      // X console.log(`port state reason is ${portStateReason}`);
+      // X console.log(`status state reason is ${statusStateReason}`);
+      
+      
+
+      /* writeScanToDB({
         'ip': myIP,
         'hostname': hostname,
         'port_id': portID,
@@ -84,8 +99,8 @@ fs.readFile(__dirname + '/samples/nmap.results.xml', function(err, data) {
         'port state reason_ttl': portStateReasonTTL,
         'host start time': startTime,
         'host stop time': stopTime
-      });
-    }
+      });*/
+    } 
     
       
 
@@ -93,5 +108,5 @@ fs.readFile(__dirname + '/samples/nmap.results.xml', function(err, data) {
   });
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5010;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
