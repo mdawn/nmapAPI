@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1>Nmap Ingester</h1>
-    <form action="/submit_file" method="POST" enctype="multipart/form-data">
+    <form action="/api/nmaps/submit_file" method="POST" enctype="multipart/form-data">
       <div class="container-fluid">
           <fieldset>
               <legend>Upload Nmap XML File</legend>
@@ -21,10 +21,13 @@
       <fieldset>
           <legend>View Scan Results by IP address</legend>
       <form action="/show" method="POST">
-        <input type="text" placeholder="IP Address">
+        <input type="text" id="ip-input" placeholder="IP Address">
         <p> </p>
         <button type="button" id="scanned-ip-button">Submit</button>
       </fieldset> 
+    </div>
+    <div id="scan-results">
+
     </div>
     
     </form>
@@ -32,5 +35,6 @@
     <ul></ul>
 
     <script src="https://code.jquery.com/jquery-3.1.0.min.js" ></script>
+    <script src="/nmap-api.js"></script>
     </body>
 </html>
